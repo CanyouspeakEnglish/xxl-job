@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Created by xuxueli on 17/5/10.
+ * 注册 等操作
  */
 @Controller
 @RequestMapping("/api")
@@ -50,16 +51,19 @@ public class JobApiController {
         if (XxlJobAdminConfig.getAdminConfig().getAccessToken()!=null
                 && XxlJobAdminConfig.getAdminConfig().getAccessToken().trim().length()>0
                 && !XxlJobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
+            // Token  验证
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 
-        // services mapping
+        // 回调日志状态 批量的
         if ("callback".equals(uri)) {
             List<HandleCallbackParam> callbackParamList = GsonTool.fromJson(data, List.class, HandleCallbackParam.class);
             return adminBiz.callback(callbackParamList);
+            //注册加更新状态
         } else if ("registry".equals(uri)) {
             RegistryParam registryParam = GsonTool.fromJson(data, RegistryParam.class);
             return adminBiz.registry(registryParam);
+            //注册移除
         } else if ("registryRemove".equals(uri)) {
             RegistryParam registryParam = GsonTool.fromJson(data, RegistryParam.class);
             return adminBiz.registryRemove(registryParam);

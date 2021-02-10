@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by xuxueli on 17/3/2.
+ * 注册线程 客户端线程 每个执行器创建一个线程
+ *
  */
 public class ExecutorRegistryThread {
     private static Logger logger = LoggerFactory.getLogger(ExecutorRegistryThread.class);
@@ -34,7 +36,9 @@ public class ExecutorRegistryThread {
             logger.warn(">>>>>>>>>>> xxl-job, executor registry config fail, adminAddresses is null.");
             return;
         }
-
+        /**
+         * 客户端
+         */
         registryThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -66,6 +70,7 @@ public class ExecutorRegistryThread {
                     }
 
                     try {
+                        //睡30秒 然后更新时间或者注册
                         if (!toStop) {
                             TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
                         }
@@ -76,15 +81,17 @@ public class ExecutorRegistryThread {
                     }
                 }
 
-                // registry remove
+                // 走到这里说明 停止那么需要移除注册的执行器
                 try {
                     RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
                     for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
                         try {
+                            //移除
                             ReturnT<String> registryResult = adminBiz.registryRemove(registryParam);
                             if (registryResult!=null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
                                 registryResult = ReturnT.SUCCESS;
                                 logger.info(">>>>>>>>>>> xxl-job registry-remove success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
+                                //多个连接也只是调用成功一次
                                 break;
                             } else {
                                 logger.info(">>>>>>>>>>> xxl-job registry-remove fail, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});

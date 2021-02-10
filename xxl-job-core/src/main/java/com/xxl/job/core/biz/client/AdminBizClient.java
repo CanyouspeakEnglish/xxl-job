@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * admin api test
+ * 客户端启动的时候创建 没一个admin连接创建一个
  *
  * @author xuxueli 2017-07-28 22:14:52
  */
@@ -37,6 +38,11 @@ public class AdminBizClient implements AdminBiz {
         return XxlJobRemotingUtil.postBody(addressUrl+"api/callback", accessToken, timeout, callbackParamList, String.class);
     }
 
+    /**
+     * 注册
+     * @param registryParam
+     * @return
+     */
     @Override
     public ReturnT<String> registry(RegistryParam registryParam) {
         return XxlJobRemotingUtil.postBody(addressUrl + "api/registry", accessToken, timeout, registryParam, String.class);

@@ -26,10 +26,21 @@ public class LoginService {
     private XxlJobUserDao xxlJobUserDao;
 
 
-    private String makeToken(XxlJobUser xxlJobUser){
+    public String makeToken(XxlJobUser xxlJobUser){
         String tokenJson = JacksonUtil.writeValueAsString(xxlJobUser);
         String tokenHex = new BigInteger(tokenJson.getBytes()).toString(16);
         return tokenHex;
+    }
+
+    public static void main(String[] args) {
+        LoginService loginService = new LoginService();
+        XxlJobUser xxlJobUser = new XxlJobUser();
+        xxlJobUser.setId(1);
+        xxlJobUser.setUsername("admin");
+        xxlJobUser.setPassword("e10adc3949ba59abbe56e057f20f883e");
+        xxlJobUser.setPermission(null);
+        String s = loginService.makeToken(xxlJobUser);
+        System.out.println(s);
     }
     private XxlJobUser parseToken(String tokenHex){
         XxlJobUser xxlJobUser = null;

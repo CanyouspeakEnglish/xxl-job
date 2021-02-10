@@ -52,24 +52,28 @@ public class JobRegistryHelper {
 					}
 				});
 
-		// for monitor
+		/**
+		 * 监控线程
+		 */
 		registryMonitorThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (!toStop) {
 					try {
-						// auto registry group
+						// 获取自动注册到xxljob上的线程组
 						List<XxlJobGroup> groupList = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().findByAddressType(0);
+						//组信息不为空之后
 						if (groupList!=null && !groupList.isEmpty()) {
-
-							// remove dead address (admin/executor)
+							//TODO  移除超时的执行器(不支持配置超时间 写死的 30*3 30为基础单位 依赖时间 如果服务器时间发生回滚会有问题)
 							List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
 							if (ids!=null && ids.size()>0) {
+								//移除超时的执行器
 								XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().removeDead(ids);
 							}
 
 							// fresh online address (admin/executor)
 							HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
+							//查询所有没有超时的执行器
 							List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
 							if (list != null) {
 								for (XxlJobRegistry item: list) {
@@ -88,7 +92,7 @@ public class JobRegistryHelper {
 								}
 							}
 
-							// fresh group address
+							// 更新执行器组的地址
 							for (XxlJobGroup group: groupList) {
 								List<String> registryList = appAddressMap.get(group.getAppname());
 								String addressListStr = null;
@@ -146,6 +150,11 @@ public class JobRegistryHelper {
 
 	// ---------------------- helper ----------------------
 
+	/**
+	 * 注册兼更新时间
+	 * @param registryParam
+	 * @return
+	 */
 	public ReturnT<String> registry(RegistryParam registryParam) {
 
 		// valid
@@ -159,11 +168,13 @@ public class JobRegistryHelper {
 		registryOrRemoveThreadPool.execute(new Runnable() {
 			@Override
 			public void run() {
+				//更新时间
 				int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
 				if (ret < 1) {
+					//<1 认为不存在数据那么就重新插入一条
 					XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
 
-					// fresh
+					// TODO 刷新任务组 没有实现
 					freshGroupRegistryInfo(registryParam);
 				}
 			}

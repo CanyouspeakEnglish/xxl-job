@@ -135,6 +135,11 @@ public class JobCompleteHelper {
 
 	// ---------------------- helper ----------------------
 
+	/**
+	 * 因为是客户端发送为了响应时间采用线程池 而且线程池隔离
+	 * @param callbackParamList
+	 * @return
+	 */
 	public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList) {
 
 		callbackThreadPool.execute(new Runnable() {
@@ -151,6 +156,11 @@ public class JobCompleteHelper {
 		return ReturnT.SUCCESS;
 	}
 
+	/**
+	 * 回调日志
+	 * @param handleCallbackParam
+	 * @return
+	 */
 	private ReturnT<String> callback(HandleCallbackParam handleCallbackParam) {
 		// valid log item
 		XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(handleCallbackParam.getLogId());
@@ -170,7 +180,7 @@ public class JobCompleteHelper {
 			handleMsg.append(handleCallbackParam.getHandleMsg());
 		}
 
-		// success, save log
+		//设置任务状态
 		log.setHandleTime(new Date());
 		log.setHandleCode(handleCallbackParam.getHandleCode());
 		log.setHandleMsg(handleMsg.toString());

@@ -27,7 +27,7 @@ public class XxlJobCompleter {
      */
     public static int updateHandleInfoAndFinish(XxlJobLog xxlJobLog) {
 
-        // finish
+        // 完成拼接日志
         finishJob(xxlJobLog);
 
         // text最大64kb 避免长度过长
@@ -35,7 +35,7 @@ public class XxlJobCompleter {
             xxlJobLog.setHandleMsg( xxlJobLog.getHandleMsg().substring(0, 15000) );
         }
 
-        // fresh handle
+        // 更新数据状态
         return XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateHandleInfo(xxlJobLog);
     }
 
@@ -47,6 +47,7 @@ public class XxlJobCompleter {
 
         // 1、handle success, to trigger child job
         String triggerChildMsg = null;
+        //成功拼接页面展示数据
         if (XxlJobContext.HANDLE_COCE_SUCCESS == xxlJobLog.getHandleCode()) {
             XxlJobInfo xxlJobInfo = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(xxlJobLog.getJobId());
             if (xxlJobInfo!=null && xxlJobInfo.getChildJobId()!=null && xxlJobInfo.getChildJobId().trim().length()>0) {

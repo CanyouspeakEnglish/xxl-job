@@ -22,12 +22,15 @@ import java.util.Map;
  * xxl-job executor (for spring)
  *
  * @author xuxueli 2018-11-01 09:24:52
+ * 客户端启动执行器
  */
 public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobSpringExecutor.class);
 
 
-    // start
+    /**
+     * 启动
+     */
     @Override
     public void afterSingletonsInstantiated() {
 
@@ -81,13 +84,15 @@ public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationC
         if (applicationContext == null) {
             return;
         }
-        // init job handler from method
+        // 获取所有bean名称
         String[] beanDefinitionNames = applicationContext.getBeanNamesForType(Object.class, false, true);
         for (String beanDefinitionName : beanDefinitionNames) {
+            //获取bean
             Object bean = applicationContext.getBean(beanDefinitionName);
 
             Map<Method, XxlJob> annotatedMethods = null;   // referred to ：org.springframework.context.event.EventListenerMethodProcessor.processBean
             try {
+                //查找方法中存在 XxlJob 注解的方法
                 annotatedMethods = MethodIntrospector.selectMethods(bean.getClass(),
                         new MethodIntrospector.MetadataLookup<XxlJob>() {
                             @Override

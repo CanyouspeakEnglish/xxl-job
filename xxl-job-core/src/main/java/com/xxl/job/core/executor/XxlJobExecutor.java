@@ -112,6 +112,9 @@ public class XxlJobExecutor  {
 
 
     // ---------------------- admin-client (rpc invoker) ----------------------
+    /**
+     * 客户端远程 http调用对象创建
+     */
     private static List<AdminBiz> adminBizList;
     private void initAdminBizList(String adminAddresses, String accessToken) throws Exception {
         if (adminAddresses!=null && adminAddresses.trim().length()>0) {

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 public class ExecutorBizTest {
 
     // admin-client
-    private static String addressUrl = "http://127.0.0.1:9999/";
+    private static String addressUrl = "http://192.168.0.233:8997/xxl-job-admin";
     private static String accessToken = null;
 
     @Test
@@ -54,8 +54,8 @@ public class ExecutorBizTest {
 
         // trigger data
         final TriggerParam triggerParam = new TriggerParam();
-        triggerParam.setJobId(1);
-        triggerParam.setExecutorHandler("demoJobHandler");
+        triggerParam.setJobId(14);
+        triggerParam.setExecutorHandler("p4-profit-schedule");
         triggerParam.setExecutorParams(null);
         triggerParam.setExecutorBlockStrategy(ExecutorBlockStrategyEnum.COVER_EARLY.name());
         triggerParam.setGlueType(GlueTypeEnum.BEAN.name());

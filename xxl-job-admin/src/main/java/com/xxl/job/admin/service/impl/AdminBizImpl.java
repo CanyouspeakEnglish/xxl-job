@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * @author xuxueli 2017-07-27 21:54:20
+ * 注册等操作 操作数据库对象相当于代理
  */
 @Service
 public class AdminBizImpl implements AdminBiz {
@@ -22,6 +23,11 @@ public class AdminBizImpl implements AdminBiz {
         return JobCompleteHelper.getInstance().callback(callbackParamList);
     }
 
+    /**
+     * 注册
+     * @param registryParam
+     * @return
+     */
     @Override
     public ReturnT<String> registry(RegistryParam registryParam) {
         return JobRegistryHelper.getInstance().registry(registryParam);
