@@ -62,11 +62,12 @@ public class XxlJobTrigger {
 
         // cover addressList
         if (addressList!=null && addressList.trim().length()>0) {
+            //0 自动注册 1 手动注册
             group.setAddressType(1);
             group.setAddressList(addressList.trim());
         }
 
-        // sharding param
+        // sharding param 分片参数
         int[] shardingParam = null;
         if (executorShardingParam!=null){
             String[] shardingArr = executorShardingParam.split("/");
@@ -107,6 +108,7 @@ public class XxlJobTrigger {
      * @param triggerType
      * @param index                     sharding index
      * @param total                     sharding index
+     * 开始调度
      */
     private static void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total){
 
@@ -193,6 +195,7 @@ public class XxlJobTrigger {
         //jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
+        //更新调用日志
         XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);
 
         logger.debug(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());

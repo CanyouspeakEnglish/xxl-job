@@ -64,7 +64,7 @@ public class XxlJobExecutor  {
     // ---------------------- start + stop ----------------------
     public void start() throws Exception {
 
-        // init logpath
+        // 初始化日志
         XxlJobFileAppender.initLogPath(logPath);
 
         // init invoker, admin-client
@@ -189,7 +189,7 @@ public class XxlJobExecutor  {
         JobThread newJobThread = new JobThread(jobId, handler);
         newJobThread.start();
         logger.info(">>>>>>>>>>> xxl-job regist JobThread success, jobId:{}, handler:{}", new Object[]{jobId, handler});
-
+        //如果老线程已经存在了 那么就将之前的线程进行中断
         JobThread oldJobThread = jobThreadRepository.put(jobId, newJobThread);	// putIfAbsent | oh my god, map's put method return the old value!!!
         if (oldJobThread != null) {
             oldJobThread.toStop(removeOldReason);
@@ -202,6 +202,7 @@ public class XxlJobExecutor  {
         JobThread oldJobThread = jobThreadRepository.remove(jobId);
         if (oldJobThread != null) {
             oldJobThread.toStop(removeOldReason);
+            //线程中断
             oldJobThread.interrupt();
 
             return oldJobThread;

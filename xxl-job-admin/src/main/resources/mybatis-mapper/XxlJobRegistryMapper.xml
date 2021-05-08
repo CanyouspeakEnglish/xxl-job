@@ -38,7 +38,7 @@
 		FROM xxl_job_registry AS t
 		WHERE t.update_time <![CDATA[ > ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
 	</select>
-
+	<!-- 更新修改时间 -->
     <update id="registryUpdate" >
         UPDATE xxl_job_registry
         SET `update_time` = #{updateTime}

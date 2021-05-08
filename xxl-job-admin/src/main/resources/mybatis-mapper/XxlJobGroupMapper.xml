@@ -26,7 +26,7 @@
 		FROM xxl_job_group AS t
 		ORDER BY t.app_name, t.title, t.id ASC
 	</select>
-
+	<!--查询自动注册的服务-->
 	<select id="findByAddressType" parameterType="java.lang.Integer" resultMap="XxlJobGroup">
 		SELECT <include refid="Base_Column_List" />
 		FROM xxl_job_group AS t

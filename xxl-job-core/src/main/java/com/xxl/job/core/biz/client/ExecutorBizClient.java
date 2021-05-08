@@ -8,6 +8,7 @@ import com.xxl.job.core.util.XxlJobRemotingUtil;
  * admin api test
  *
  * @author xuxueli 2017-07-28 22:14:52
+ * 调用代理
  */
 public class ExecutorBizClient implements ExecutorBiz {
 
@@ -27,7 +28,10 @@ public class ExecutorBizClient implements ExecutorBiz {
     private String accessToken;
     private int timeout = 3;
 
-
+    /**
+     * 心跳
+     * @return
+     */
     @Override
     public ReturnT<String> beat() {
         return XxlJobRemotingUtil.postBody(addressUrl+"beat", accessToken, timeout, "", String.class);
@@ -38,16 +42,31 @@ public class ExecutorBizClient implements ExecutorBiz {
         return XxlJobRemotingUtil.postBody(addressUrl+"idleBeat", accessToken, timeout, idleBeatParam, String.class);
     }
 
+    /**
+     * 调用
+     * @param triggerParam
+     * @return
+     */
     @Override
     public ReturnT<String> run(TriggerParam triggerParam) {
         return XxlJobRemotingUtil.postBody(addressUrl + "run", accessToken, timeout, triggerParam, String.class);
     }
 
+    /**
+     * 停止
+     * @param killParam
+     * @return
+     */
     @Override
     public ReturnT<String> kill(KillParam killParam) {
         return XxlJobRemotingUtil.postBody(addressUrl + "kill", accessToken, timeout, killParam, String.class);
     }
 
+    /**
+     * 日志
+     * @param logParam
+     * @return
+     */
     @Override
     public ReturnT<LogResult> log(LogParam logParam) {
         return XxlJobRemotingUtil.postBody(addressUrl + "log", accessToken, timeout, logParam, LogResult.class);

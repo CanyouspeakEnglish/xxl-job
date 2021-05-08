@@ -94,6 +94,7 @@ public class JobRegistryHelper {
 
 							// 更新执行器组的地址
 							for (XxlJobGroup group: groupList) {
+								//获取
 								List<String> registryList = appAddressMap.get(group.getAppname());
 								String addressListStr = null;
 								if (registryList!=null && !registryList.isEmpty()) {
@@ -117,6 +118,7 @@ public class JobRegistryHelper {
 						}
 					}
 					try {
+						//30秒重试一下
 						TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
 					} catch (InterruptedException e) {
 						if (!toStop) {
@@ -196,6 +198,7 @@ public class JobRegistryHelper {
 		registryOrRemoveThreadPool.execute(new Runnable() {
 			@Override
 			public void run() {
+				//删除 xxl_job_registry 数据 通过registryGroup registryKey registryValue
 				int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
 				if (ret > 0) {
 					// fresh

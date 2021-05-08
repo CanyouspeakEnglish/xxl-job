@@ -108,7 +108,7 @@ public class XxlJobContext {
     }
 
     // ---------------------- tool ----------------------
-
+    //支持子线程获取父线程数据
     private static InheritableThreadLocal<XxlJobContext> contextHolder = new InheritableThreadLocal<XxlJobContext>(); // support for child thread of job handler)
 
     public static void setXxlJobContext(XxlJobContext xxlJobContext){

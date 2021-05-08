@@ -86,7 +86,7 @@ public class XxlJobRemotingUtil {
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestProperty("Accept-Charset", "application/json;charset=UTF-8");
-
+            //token
             if(accessToken!=null && accessToken.trim().length()>0){
                 connection.setRequestProperty(XXL_JOB_ACCESS_TOKEN, accessToken);
             }
